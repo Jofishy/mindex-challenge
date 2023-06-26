@@ -24,16 +24,14 @@ public class DataBootstrap {
     public void init() {
         InputStream inputStream = this.getClass().getResourceAsStream(DATASTORE_LOCATION);
 
-        Employee[] employees = null;
-
         try {
-            employees = objectMapper.readValue(inputStream, Employee[].class);
+            final Employee[] employees = objectMapper.readValue(inputStream, Employee[].class);
+
+            for (Employee employee : employees) {
+                employeeRepository.insert(employee);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-
-        for (Employee employee : employees) {
-            employeeRepository.insert(employee);
         }
     }
 }
